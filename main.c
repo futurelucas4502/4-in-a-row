@@ -2,18 +2,22 @@
 #include <SFML/Graphics.h>
 #include <SFML/Window.h>
 #include <SFML/System.h>
+
+// Preprocess function types
+void clickCircle(int, int);
+/* This is the actual Render window its defined like this as it is a pointer to an sfRenderWindow that we will then interact with */
+sfRenderWindow *window;
+// Create circle array
+sfCircleShape *circle[42];
+
 int main(int argc, char const *argv[])
 {
-    // preprocess functions for later
-    void clickCircle(sfRenderWindow *, int, int, sfCircleShape *[42]);
-    /* This is the actual Render window its defined like this as it is a pointer to an sfRenderWindow that we will then interact with */
-    sfRenderWindow *window;
     /* This will be used in the main loop its used to keep track of when certain events take place and lets us do things like event listeners (kinda) */
     sfEvent event;
     /* Default bit colour depth at set resolution */
     sfVideoMode mode = {760, 650, sfVideoMode_getDesktopMode().bitsPerPixel};
     /* Start creating the window i could use sfVideoMode_getDesktopMode() instead of mode however this is like the max ur screen can do and idk why ud ever want this so */
-    window = sfRenderWindow_create(mode, "4 in a row", sfClose, NULL);
+    window = sfRenderWindow_create(mode, "4 in a row", sfResize | sfClose, NULL);
 
     if (!window)
     {
@@ -26,7 +30,6 @@ int main(int argc, char const *argv[])
 
     /* Start outer Setup */
 
-    sfCircleShape *circle[42];
     for (size_t i = 0; i < 42; i++)
     {
         circle[i] = sfCircleShape_create();
@@ -40,7 +43,7 @@ int main(int argc, char const *argv[])
     while (sfRenderWindow_isOpen(window))
     {
         /* Start Event Checking */
-        if (sfRenderWindow_pollEvent(window, &event))
+        while (sfRenderWindow_pollEvent(window, &event)) // having this as an event loop is better than an if statement as it improves performance
         {
             if (event.type == sfEvtClosed)
             {
@@ -55,7 +58,7 @@ int main(int argc, char const *argv[])
             }
             else if (event.type == sfEvtMouseButtonPressed && event.mouseButton.button == sfMouseLeft)
             {
-                clickCircle(window, event.mouseButton.x, event.mouseButton.y, circle);
+                clickCircle(event.mouseButton.x, event.mouseButton.y);
             }
         }
         // End Event Checking
@@ -89,11 +92,15 @@ int main(int argc, char const *argv[])
         sfRenderWindow_display(window); /* Render window with changes made above */
     }
     /* Cleanup aka free designated memory */
+    for (size_t i = 0; i < 42; i++)
+    {
+        sfCircleShape_destroy(circle[i]);
+    }
     sfRenderWindow_destroy(window);
     return 0;
 }
 
-void clickCircle(sfRenderWindow *window, int x, int y, sfCircleShape *circle[42])
+void clickCircle(x, y)
 {
     sfVector2i mouseDownPosition;
     mouseDownPosition.x = x;
@@ -105,13 +112,28 @@ void clickCircle(sfRenderWindow *window, int x, int y, sfCircleShape *circle[42]
         if (sfFloatRect_contains(&circlePos, clickPos.x, clickPos.y))
         {
             sfColor circleColour = sfCircleShape_getFillColor(circle[i]);
-            if (circleColour.r == sfWhite.a && circleColour.g == sfWhite.b && circleColour.b == sfWhite.g && circleColour.a == sfWhite.a)
+            if (circleColour.r == sfWhite.r && circleColour.g == sfWhite.g && circleColour.b == sfWhite.b && circleColour.a == sfWhite.a)
             {
-                sfCircleShape_setFillColor(circle[i], sfYellow);
+                if (i + 7 < 42)
+                {
+                    sfColor belowColour = sfCircleShape_getFillColor(circle[i + 7]);
+                    if (belowColour.b != 255) // as long as blue is not 255 it means we have either yellow or red below
+                    {
+                        sfCircleShape_setFillColor(circle[i], sfRed);
+                    }
+                    else
+                    {
+                        puts("There is no colour below this");
+                    }
+                }
+                else
+                { // bottom row
+                    sfCircleShape_setFillColor(circle[i], sfRed);
+                }
             }
             else
             {
-                puts("No!");
+                puts("There is already a colour here");
             }
             break;
         }
