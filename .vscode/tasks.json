@@ -21,12 +21,12 @@
             "args": [
                 "/Zi",
                 "/EHsc",
-                "/I${fileDirname}/CSFML-2.5-windows-64-bit/include",
-                "${fileDirname}/CSFML-2.5-windows-64-bit/lib/msvc/csfml-audio.lib",
-                "${fileDirname}/CSFML-2.5-windows-64-bit/lib/msvc/csfml-graphics.lib",
-                "${fileDirname}/CSFML-2.5-windows-64-bit/lib/msvc/csfml-network.lib",
-                "${fileDirname}/CSFML-2.5-windows-64-bit/lib/msvc/csfml-system.lib",
-                "${fileDirname}/CSFML-2.5-windows-64-bit/lib/msvc/csfml-window.lib",
+                "/I${fileDirname}/CSFML-2.6.1-windows-64-bit/include",
+                "${fileDirname}/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-audio.lib",
+                "${fileDirname}/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-graphics.lib",
+                "${fileDirname}/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-network.lib",
+                "${fileDirname}/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-system.lib",
+                "${fileDirname}/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-window.lib",
                 "${file}",
                 "/link",
                 "/MACHINE:x64"
