@@ -10,6 +10,7 @@ bool clickCircle(sfVector2f clickPos);
 bool clickRectangle(sfVector2f clickPos);
 void label(const char *userText, int x, int y, int fontSize, sfColor textColour);
 void button(sfRectangleShape *rectangle, int rectangleWidth, int rectangleHeight, int rectangleX, int rectangleY, sfColor rectangleColour, const char *userText, int fontSize, sfColor textColor);
+void winCheck();
 
 // This is the actual Render window its defined like this as it is a pointer to an sfRenderWindow that we will then interact with
 sfRenderWindow *window;
@@ -192,9 +193,10 @@ void userClick(int xPos, int yPos) {
     mousePixelClick.y = yPos;
     sfVector2f clickPos = sfRenderWindow_mapPixelToCoords(window, mousePixelClick, sfRenderWindow_getView(window));  // this converts those pixel coordinates to the actual coordinates inside of the currently rendered window for example lets say your window is in the top left of your screen and you press the bottom right of the window this is going to translate that click from being in the top left area of your monitor to the actualy potition  inside the window which is the bottom right... i think
 
-    if (clickCircle(clickPos))
-        puts("User clicked a circle");
-    else if (clickRectangle(clickPos))
+    if (clickCircle(clickPos)) {
+        puts("User clicked a circle, checking for 4 in a row...");
+        winCheck();
+    } else if (clickRectangle(clickPos))
         puts("User clicked a rectangle");
     else
         puts("User clicked elsewhere");
@@ -244,4 +246,18 @@ bool clickRectangle(sfVector2f clickPos) {
         return true;
     }
     return false;
+}
+
+void winCheck() {
+    for (size_t i = 0; i < 42; i++) {                                  // loop all 42 circles allowing our checks
+        sfColor circleColour = sfCircleShape_getFillColor(circle[i]);  // get the current circle colour
+        // TODO: check where we are on the board and determine the directions we could have win in then after checking which directions we could win in we create arrays of each of the pieces in each direction
+        // TODO: change the circle array to be A 2D MATRIX as this will be much easier to check against
+
+
+
+        if (i + 7 > 35) {                                                              // if were on the bottom row we can only check above and diagonal
+
+        }
+    }
 }
