@@ -15,7 +15,7 @@ void winCheck();
 // This is the actual Render window its defined like this as it is a pointer to an sfRenderWindow that we will then interact with
 sfRenderWindow *window;
 // Create circle array each circle is a seperate shape object so each must be interacted with individually
-sfCircleShape *circle[42];
+sfCircleShape *circle[7][6];
 sfRectangleShape *startButton;
 sfRectangleShape *quitButton;
 // Define user1sTurn as this will allow us to choose which colour to set the circle to based on the users turn
@@ -54,7 +54,7 @@ int main(int argc, char const *argv[]) {
         return 1;
     }
     title = sfText_create();
-    sfText_setString(title, "Welcome to connect 4!");
+    sfText_setString(title, "Welcome to 4 in a row!");
     sfText_setFont(title, titleFont);
     sfText_setCharacterSize(title, 50);
     sfText_setPosition(title, (sfVector2f){50, 20});
@@ -78,10 +78,12 @@ int main(int argc, char const *argv[]) {
 
     // Start filling the circle array with circle objects which will then be used to create the board
 
-    for (size_t i = 0; i < 42; i++) {
-        circle[i] = sfCircleShape_create();
-        sfCircleShape_setRadius(circle[i], 30.0);
-        sfCircleShape_setFillColor(circle[i], sfWhite);
+    for (size_t i = 0; i < 7; i++) {
+        for (size_t j = 0; j < 6; j++) {
+            circle[i][j] = sfCircleShape_create();
+            sfCircleShape_setRadius(circle[i][j], 30.0);
+            sfCircleShape_setFillColor(circle[i][j], sfWhite);
+        }
     }
 
     // Finish filling circle array
@@ -113,12 +115,13 @@ int main(int argc, char const *argv[]) {
         int y = 100;
         int circleNum = 0;
 
-        for (size_t i = 0; i < 7; i++) {                                       // draw the grid of circles from left to right 1 row at a time 7 wide 6 tall
-            sfCircleShape_setPosition(circle[circleNum], (sfVector2f){x, y});  // in the first loop this set position of circle 1 to be 50 50 starting from the top left so 50 across and 50 down
-            sfRenderWindow_drawCircleShape(window, circle[circleNum], NULL);   // this then draws the circle with its positional data on the window object
-            x += 100;                                                          // we then add 100 to x to move the next circle to be at position 150 50
-            circleNum++;                                                       // we increase the circle count so circle 2 in the array is selected to be drawn next
-            if (i == 6 && count < 5) {                                         // when its looped 7 times we then reset the counter i to -1 and reset the x value to be 50 next we set y to be 150 this results in a new row of circles below being now created this is run 6 times starting at 0 then when count = 5 aka when its run 6 times the if statement doesnt run meaning i doesnt get reset and it finally leaves the for loop
+        for (size_t i = 0; i < 7; i++) {                                      // draw the grid of circles from left to right 1 row at a time 7 wide 6 tall
+            sfCircleShape_setPosition(circle[i][count], (sfVector2f){x, y});  // in the first loop this set position of circle 1 to be 50 50 starting from the top left so 50 across and 50 down
+            sfRenderWindow_drawCircleShape(window, circle[i][count], NULL);   // this then draws the circle with its positional data on the window object
+
+            x += 100;                   // we then add 100 to x to move the next circle to be at position 150 50
+            circleNum++;                // we increase the circle count so circle 2 in the array is selected to be drawn next
+            if (i == 6 && count < 5) {  // when its looped 7 times we then reset the counter i to -1 and reset the x value to be 50 next we set y to be 150 this results in a new row of circles below being now created this is run 6 times starting at 0 then when count = 5 aka when its run 6 times the if statement doesnt run meaning i doesnt get reset and it finally leaves the for loop
                 count++;
                 i = -1;
                 y += 100;
@@ -143,8 +146,11 @@ int main(int argc, char const *argv[]) {
     }
 
     // Cleanup aka free designated memory
-    for (size_t i = 0; i < 42; i++)
-        sfCircleShape_destroy(circle[i]);
+
+    for (size_t i = 0; i < 7; i++)
+        for (size_t j = 0; j < 6; j++)
+            sfCircleShape_destroy(circle[i][j]);
+
     sfRectangleShape_destroy(startButton);
     sfRectangleShape_destroy(quitButton);
 
@@ -205,29 +211,34 @@ void userClick(int xPos, int yPos) {
 bool clickCircle(sfVector2f clickPos) {  // im not sure if this is the best approach but we literlly just check the WHOLE array of cirlces to see if the user has selected any of them ;;
     bool userClickedCircle = false;
     if (gameRunning) {
-        for (size_t i = 0; i < 42; i++) {                                      // loop all 42 circles checking the location of the click against the exact area the circle takes up
-            sfFloatRect circlePos = sfCircleShape_getGlobalBounds(circle[i]);  // get the area of pixels contained within the first circle
-            if (sfFloatRect_contains(&circlePos, clickPos.x, clickPos.y)) {    // if the user clicked within the current circle
-                userClickedCircle = true;
-                sfColor circleColour = sfCircleShape_getFillColor(circle[i]);                      // get the current circle colour
-                if (circleColour.b == 255) {                                                       // if the current circle has a blue colour value of 255 it means it cannot be yellow or red so it must be white so this is a valid place to put in a new circle colour
-                    if (i + 7 < 42) {                                                              // if not on the bottom row we need to check if the circles below us have colours if not we obviously can't place something here
-                        sfColor belowColour = sfCircleShape_getFillColor(circle[i + 7]);           // get the colour of the circle below the current one
-                        if (belowColour.b != 255) {                                                // as long as blue is not 255 it means we have either a yellow or red circle below
-                            sfCircleShape_setFillColor(circle[i], user1sTurn ? sfRed : sfYellow);  // fill the circle the user clicked with red or yellow depending on the turn
-                            user1sTurn = !user1sTurn;
-                        } else {
-                            puts("There is no colour below this");
-                        }
-                    } else {  // if we're on the bottom row we can just set the colour as we know this is a valid move
-                        sfCircleShape_setFillColor(circle[i], user1sTurn ? sfRed : sfYellow);
-                        user1sTurn = !user1sTurn;
-                    }
+        for (size_t i = 0; i < 7; i++) {  // loop all 42 circles checking the location of the click against the exact area the circle takes up
+            for (size_t j = 0; j < 6; j++) {
+                sfFloatRect circlePos = sfCircleShape_getGlobalBounds(circle[i][j]);  // get the area of pixels contained within the first circle
+                if (sfFloatRect_contains(&circlePos, clickPos.x, clickPos.y)) {       // if the user clicked within the current circle
+                    userClickedCircle = true;
 
-                } else {  // the current circle colour is not white
-                    puts("There is already a colour here");
+                    sfColor circleColour = sfCircleShape_getFillColor(circle[i][j]);  // get the current circle colour
+                    if (circleColour.b == 255) {                                      // if the current circle has a blue colour value of 255 it means it cannot be yellow or red so it must be white so this is a valid place to put in a new circle colour
+                        int currentCircleNumber = i + (j * 7);
+                        printf("%d", currentCircleNumber);
+                        if (currentCircleNumber + 7 < 42) {                                               // if not on the bottom row we need to check if the circles below us have colours if not we obviously can't place something here
+                            sfColor belowColour = sfCircleShape_getFillColor(circle[i][j + 1]);           // get the colour of the circle below the current one
+                            if (belowColour.b != 255) {                                                   // as long as blue is not 255 it means we have either a yellow or red circle below
+                                sfCircleShape_setFillColor(circle[i][j], user1sTurn ? sfRed : sfYellow);  // fill the circle the user clicked with red or yellow depending on the turn
+                                user1sTurn = !user1sTurn;
+                            } else {
+                                puts("There is no colour below this");
+                            }
+                        } else {  // if we're on the bottom row we can just set the colour as we know this is a valid move
+                            sfCircleShape_setFillColor(circle[i][j], user1sTurn ? sfRed : sfYellow);
+                            user1sTurn = !user1sTurn;
+                        }
+
+                    } else {  // the current circle colour is not white
+                        puts("There is already a colour here");
+                    }
+                    break;
                 }
-                break;
             }
         }
     }
@@ -249,12 +260,12 @@ bool clickRectangle(sfVector2f clickPos) {
 }
 
 void winCheck() {
-    for (size_t i = 0; i < 42; i++) {                                  // loop all 42 circles allowing our checks
-        sfColor circleColour = sfCircleShape_getFillColor(circle[i]);  // get the current circle colour
-        // TODO: check where we are on the board and determine the directions we could have win in then after checking which directions we could win in we create arrays of each of the pieces in each direction
-        // TODO: change the circle array to be A 2D MATRIX as this will be much easier to check against
+    // for (size_t i = 0; i < 42; i++) {                                  // loop all 42 circles allowing our checks
+    //     sfColor circleColour = sfCircleShape_getFillColor(circle[i]);  // get the current circle colour
+    //     // TODO: check where we are on the board and determine the directions we could have win in then after checking which directions we could win in we create arrays of each of the pieces in each direction
+    //     // TODO: change the circle array to be A 2D MATRIX as this will be much easier to check against
 
-        if (i + 7 > 35) {  // if were on the bottom row we can only check above and diagonal
-        }
-    }
+    //     if (i + 7 > 35) {  // if were on the bottom row we can only check above and diagonal
+    //     }
+    // }
 }
