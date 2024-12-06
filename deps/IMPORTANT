@@ -1,0 +1,6 @@
+When updating CSFML for mac os u must make sure so also download the SFML files and put all files in the SFML/extlibs folder into the CSFML-mac/Frameworks folder 
+
+as well as putting the contents of the SFML/Frameworks folder into the CSFML/lib folder
+
+
+Currently fonts are not auto copied on mac as i dont know how to do it ive tried but can't figure it out lol so just copy them to output lmao

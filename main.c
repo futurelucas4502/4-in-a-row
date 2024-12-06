@@ -47,7 +47,7 @@ int main(int argc, char const *argv[]) {
     // End main setup of window and event handling
 
     // Create font from file so we can use it for our title this is done outside of our game loop to prevent importing the font 30 times a second...
-    titleFont = sfFont_createFromFile("Showdex.ttf");
+    titleFont = sfFont_createFromFile("Showdex.otf");
     if (!titleFont) {
         puts("Unable to create title font, aborting.");
         sfRenderWindow_destroy(window);
