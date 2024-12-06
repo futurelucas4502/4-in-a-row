@@ -1,4 +1,4 @@
 * text=auto
-*.dll text eol=crlf
-*.ttf text eol=crlf
+*.dll binary
+*.ttf binary
 
