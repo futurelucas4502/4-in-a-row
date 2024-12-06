@@ -254,10 +254,7 @@ void winCheck() {
         // TODO: check where we are on the board and determine the directions we could have win in then after checking which directions we could win in we create arrays of each of the pieces in each direction
         // TODO: change the circle array to be A 2D MATRIX as this will be much easier to check against
 
-
-
-        if (i + 7 > 35) {                                                              // if were on the bottom row we can only check above and diagonal
-
+        if (i + 7 > 35) {  // if were on the bottom row we can only check above and diagonal
         }
     }
 }

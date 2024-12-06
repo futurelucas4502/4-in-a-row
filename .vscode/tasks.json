@@ -8,6 +8,8 @@
                     "/C",
                     // The path depends on the version of Visual Studio you have installed.
                     "cd C:/Program^ Files/Microsoft^ Visual^ Studio/2022/Community/VC/Auxiliary/Build && vcvars64.bat && cd ${workspaceFolder}",
+                    "&&",
+                    "xcopy ${workspaceFolder}\\deps\\CSFML-2.6.1-windows-64-bit\\bin\\*.dll ${workspaceFolder}\\output\\ /y && xcopy ${workspaceFolder}\\deps\\fonts\\*.ttf ${workspaceFolder}\\output\\ /y",
                     "&&"
                 ]
             }
@@ -19,14 +21,17 @@
             "label": "C/C++: cl.exe build active file",
             "command": "cl.exe",
             "args": [
+                "/Fdoutput\\",
+                "/Fooutput\\",
+                "/Feoutput\\",
                 "/Zi",
                 "/EHsc",
-                "/I${fileDirname}/deps/CSFML-2.6.1-windows-64-bit/include",
-                "${fileDirname}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-audio.lib",
-                "${fileDirname}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-graphics.lib",
-                "${fileDirname}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-network.lib",
-                "${fileDirname}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-system.lib",
-                "${fileDirname}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-window.lib",
+                "/I${workspaceFolder}/deps/CSFML-2.6.1-windows-64-bit/include",
+                "${workspaceFolder}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-audio.lib",
+                "${workspaceFolder}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-graphics.lib",
+                "${workspaceFolder}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-network.lib",
+                "${workspaceFolder}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-system.lib",
+                "${workspaceFolder}/deps/CSFML-2.6.1-windows-64-bit/lib/msvc/csfml-window.lib",
                 "${file}",
                 "/link",
                 "/MACHINE:x64"
