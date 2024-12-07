@@ -291,8 +291,8 @@ void winCheck() {
     int playerColour = sfColor_toInteger(user1sTurn ? sfYellow : sfRed);  // this is set to the opposite as when a player finishes their move the user turn is updated but in this case we want to ignore that update
 
     // Horizontal Win Check
-    for (int i = 6; i > 0; i--) {      // height
-        for (int j = 7; j > 0; j--) {  // width
+    for (int i = 5; i > 0; i--) {      // height
+        for (int j = 3; j > 0; j--) {  // width
             if (sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j + 1][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j + 2][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j + 3][i])) == playerColour) {
                 gameOver();
             }
@@ -300,8 +300,8 @@ void winCheck() {
     }
 
     // Vertical Win Check
-    for (int i = 6; i > 0; i--) {      // height
-        for (int j = 7; j > 0; j--) {  // width
+    for (int i = 2; i > 0; i--) {      // height
+        for (int j = 6; j > 0; j--) {  // width
             if (sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i + 1])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i + 2])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i + 3])) == playerColour) {
                 gameOver();
             }
@@ -309,8 +309,8 @@ void winCheck() {
     }
 
     // Diagonal Win Check left to right
-    for (int i = 6; i > 0; i--) {      // height
-        for (int j = 7; j > 0; j--) {  // width
+    for (int i = 2; i > 0; i--) {      // height
+        for (int j = 6; j > 0; j--) {  // width
             if (sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j - 1][i + 1])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j - 2][i + 2])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j - 3][i + 3])) == playerColour) {
                 gameOver();
             }
@@ -318,8 +318,8 @@ void winCheck() {
     }
 
     // Diagonal Win Check right to left
-    for (int i = 6; i > 0; i--) {      // height
-        for (int j = 7; j > 0; j--) {  // width
+    for (int i = 5; i > 0; i--) {      // height
+        for (int j = 6; j > 0; j--) {  // width
             if (sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j - 1][i - 1])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j - 2][i - 2])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j - 3][i - 3])) == playerColour) {
                 gameOver();
             }
