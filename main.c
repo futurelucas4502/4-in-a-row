@@ -290,6 +290,22 @@ bool clickRectangle(sfVector2f clickPos) {
 void winCheck() {
     int playerColour = sfColor_toInteger(user1sTurn ? sfYellow : sfRed);  // this is set to the opposite as when a player finishes their move the user turn is updated but in this case we want to ignore that update
 
+    // Horizontal Win Check Example of incorrectness
+    // for (int i = 5; i > 0; i--) {      // height
+    //     for (int j = 6; j > 0; j--) {  // width
+    //         if (sfColor_toInteger(sfCircleShape_getFillColor(circle[j][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j + 1][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j + 2][i])) == playerColour && sfColor_toInteger(sfCircleShape_getFillColor(circle[j + 3][i])) == playerColour) {
+    //             gameOver();
+    //         }
+    //     }
+    // }
+
+    // If we did the above it would result in the if statement doing something like below except as soon as it reached the second one it would crash on Windows since 7, 8 & 9 don't exist in our array so we have to minus 3 since we add 3 to be able to check for 4 in a row starting at origin of 0 so 0,1,2,3 if they match u have a 4 in a row 
+
+    // puts(sfColor_toInteger(sfCircleShape_getFillColor(circle[6][5])) == playerColour ? "True" : "False");
+    // puts(sfColor_toInteger(sfCircleShape_getFillColor(circle[7][5])) == playerColour ? "True" : "False");
+    // puts(sfColor_toInteger(sfCircleShape_getFillColor(circle[8][5])) == playerColour ? "True" : "False");
+    // puts(sfColor_toInteger(sfCircleShape_getFillColor(circle[9][5])) == playerColour ? "True" : "False");
+
     // Horizontal Win Check
     for (int i = 5; i > 0; i--) {      // height
         for (int j = 3; j > 0; j--) {  // width
